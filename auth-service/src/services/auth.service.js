@@ -12,7 +12,7 @@ export const registerService = async (payload) => {
   const user = await userModel.create({
     name,
     email,
-    passsword: hashedPassword
+    password: hashedPassword
   })
   return {
     success: true,
