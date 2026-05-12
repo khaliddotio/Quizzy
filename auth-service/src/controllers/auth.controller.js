@@ -1,29 +1,56 @@
-import bcrypt from "bcrypt"
-import userModel from "../models/user.model.js"
+import {registerService,loginService} from "../services/auth.service.js";
 
-export const register = async (req, res) =>{
-try {
-    const {name , email, password} = req.body;
 
-    const existingUser = await UserActivation.findOne({email});
+export const register = async (req,res) => {
+    try {
 
-    if(existingUser){
-        return res.status(400).json({
-            message: "User alreadt exist"
-        })
+        const result =
+            await registerService(req.body);
+
+        res.status(201).json(result);
+
+    } catch (error) {
+
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+
     }
-    const hasedPassword = await bcrypt.hash(password, 10)
+};
 
-    const user = await user.create({
-        name,
-        email,
-        password: hasedPassword
-    })
-    
-} catch (error) {
-   res.status(500).json({
-    message: error.message
-   })
 
-}
-}
+export const Login = async (req,res) => {
+    try {
+
+        const result =
+            await loginService(req.body);
+
+        res.cookie(
+            "refreshToken",
+            result.refreshToken,
+            {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict"
+            }
+        );
+
+        res.status(200).json({
+            success: true,
+
+            accessToken:
+                result.accessToken,
+
+            user: result.user
+        });
+
+    } catch (error) {
+
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+};

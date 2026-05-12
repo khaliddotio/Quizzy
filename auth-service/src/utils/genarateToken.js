@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import config from "../config/config.js"
 
-export const ganarateAccesToken = (user) =>{
+export const genarateAccesToken = (user) =>{
     return jwt.sign(
         {
             id: user._id,
@@ -14,7 +14,7 @@ export const ganarateAccesToken = (user) =>{
     )
 } 
 
-export const ganarateRefreshToken = (user) => {
+export const genarateRefreshToken = (user) => {
  return jwt.sign(
     {
         id: user._id
