@@ -2,7 +2,8 @@ Service	Responsibility
 
 
 
-Auth Service ----> 	Login, JWT, RBAC
+Auth Service ----> 	Login, 
+, RBAC
 User/Batch Service ---> 	Students & batches
 Quiz Service ---> 	Questions & tests
 Upload Service	---> Parse CSV/DOCX/JSON
