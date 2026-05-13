@@ -1,4 +1,4 @@
-import byrypt from "bcrypt"
+import bcrypt from "bcrypt"
 import userModel from "../models/user.model.js"
 import { genarateAccesToken, genarateRefreshToken } from "../utils/genarateToken.js"
 
@@ -8,7 +8,7 @@ export const registerService = async (payload) => {
   if (exisitingUser) {
     throw new Error("User already exist");
   }
-  const hashedPassword = await byrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10)
   const user = await userModel.create({
     name,
     email,
@@ -21,7 +21,6 @@ export const registerService = async (payload) => {
 }
 
 
-
 export const loginService = async (payload) => {
   const { email, password } = payload;
 
@@ -31,7 +30,7 @@ export const loginService = async (payload) => {
     throw new Error("Invalid Credentials");
   }
 
-  const isMatch = await byrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
 
 
   if (!isMatch) {
@@ -47,7 +46,7 @@ export const loginService = async (payload) => {
     accessToken,
     refreshToken,
     user: {
-      id: user_id,
+      id: user._id,
       email: user.email,
       role: user.role
     }
