@@ -17,8 +17,8 @@ export const registerService = async (payload) => {
   return {
     success: true,
     user
-  }
-}
+  } 
+} 
 
 
 export const loginService = async (payload) => {
