@@ -1,23 +1,27 @@
-import jwt from "jsonwebtoken"
-import config from "../config/config.js"
+import { verifyToken } from "../utils/jwt.js";
 
-export const verifyToken = (req, res, next) => {
+export const isAuthenticated = async (req, res, next) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const token = req.cookies.token;
 
         if (!token) {
-            return res.status(400).json({
-                message: "Unauthorized"
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized",
             });
-        };
-        
-        const decoded = jwt.verify(token, config.JWT_ACCESS_SECRET);
+        }
 
-        req.user(decoded)
-        next()
+        const decoded = verifyToken(token);
+
+        req.user = decoded;
+
+        next();
+
     } catch (error) {
-   return res.status(400).json({
-    message: "Invalid token"
-   })
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid or expired token',
+            error: error.message
+        });
     }
-} 
+};
